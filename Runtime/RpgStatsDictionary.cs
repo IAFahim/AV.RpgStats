@@ -6,11 +6,10 @@ using AV.DictionaryVisualizer.Runtime;
 using UnityEngine;
 using Variable.RPG;
 
-[HelpURL("https://github.com/IAFahim/AV.RpgStats")]
-[AddComponentMenu("AV/RpgStats/RpgStatsDictionary")]
-
 namespace AV.RpgStats.Runtime
 {
+    [HelpURL("https://github.com/IAFahim/AV.RpgStats")]
+    [AddComponentMenu("AV/RpgStats/RpgStatsDictionary")]
     [DefaultExecutionOrder(-999)]
     public class RpgStatsDictionary : MonoBehaviour, IRpgStatsMap
     {

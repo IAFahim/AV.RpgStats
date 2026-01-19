@@ -3,10 +3,9 @@ using BovineLabs.Core.ObjectManagement;
 using UnityEngine;
 using Variable.RPG;
 
-[HelpURL("https://github.com/IAFahim/AV.RpgStats")]
-
 namespace AV.RpgStats.Runtime
 {
+    [HelpURL("https://github.com/IAFahim/AV.RpgStats")]
     [CreateAssetMenu(fileName = nameof(RpgStatScript), menuName = "AV/" + nameof(RpgStatScript) + "/New")]
     public class RpgStatScript : ScriptableObject, IUID
     {
