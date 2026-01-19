@@ -1,0 +1,39 @@
+{
+  "name": "com.av.rpgstats",
+  "version": "1.0.0",
+  "displayName": "AV RPG Stats",
+  "description": "Attribute and statistics system for RPG characters with modular stat management and editor tools.",
+  "unity": "2021.3",
+  "author": {
+    "name": "IAFahim",
+    "email": "iafahim.dev@gmail.com",
+    "url": "https://github.com/IAFahim"
+  },
+  "keywords": [
+    "rpg",
+    "stats",
+    "attributes",
+    "character"
+  ],
+  "category": "Gameplay",
+  "dependencies": {
+    "com.av.lifetime": "1.0.0",
+    "com.av.variablerpg": "1.0.0",
+    "com.av.cancelfoldout": "2.3.0",
+    "com.av.dictionaryvisualizer": "1.0.0",
+    "com.unity.entities": "1.0.0",
+    "com.bovinelabs.core": "https://gitlab.com/tertle/com.bovinelabs.core.git#1.6.0"
+  },
+  "samples": [
+    {
+      "displayName": "Demo Scene",
+      "description": "Example scene showing stat modifiers and targeting",
+      "path": "Samples~/Scenes/Test Attribute.unity"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IAFahim/AV.RpgStats"
+  },
+  "licensesUrl": "https://github.com/IAFahim/AV.RpgStats/blob/main/LICENSE.md"
+}
