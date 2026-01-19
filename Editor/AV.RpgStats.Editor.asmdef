@@ -1,16 +1,20 @@
-name: AV.RpgStats.Editor
-rootNamespace: AV.RpgStats
-references:
-- GUID:ea3edd2b33704980aab8498a8d7dbee2
-- GUID:481de76113c024d4db7bd67e34d9a7ea
-- GUID:41fe4baeb6b4a3246a7542f66e1fde43
-includePlatforms:
-- Editor
-excludePlatforms: []
-allowUnsafeCode: false
-overrideReferences: false
-precompiledReferences: []
-autoReferenced: true
-defineConstraints: []
-versionDefines: []
-noEngineReferences: false
+{
+    "name": "AV.RpgStats.Editor",
+    "rootNamespace": "AV.RpgStats",
+    "references": [
+        "GUID:ea3edd2b33704980aab8498a8d7dbee2",
+        "GUID:481de76113c024d4db7bd67e34d9a7ea",
+        "GUID:41fe4baeb6b4a3246a7542f66e1fde43"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
