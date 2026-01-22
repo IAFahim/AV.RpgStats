@@ -8,15 +8,13 @@ using Variable.RPG;
 
 namespace AV.RpgStats.Runtime
 {
-    [HelpURL("https://github.com/IAFahim/AV.RpgStats")]
-    [AddComponentMenu("AV/RpgStats/RpgStatsDictionary")]
     [DefaultExecutionOrder(-999)]
     public class RpgStatsDictionary : MonoBehaviour, IRpgStatsMap
     {
-        [SerializeField] private bool hasUnsavedChanges;
+        [SerializeField] private bool isDirty;
 
         [Header("Configuration")] [SerializeField]
-        private RpgStatScript[] attributeScripts = Array.Empty<RpgStatScript>();
+        private RpgStatScript[] rpgStatScripts = Array.Empty<RpgStatScript>();
 
         [SerializeField] private RpgStatScriptsGroup rpgStatScriptsGroup;
 
@@ -26,7 +24,7 @@ namespace AV.RpgStats.Runtime
             valueFormatterType: typeof(RpgStatExtensions),
             valueFormatter: nameof(RpgStatExtensions.ToStringCompact)
         )]
-        private readonly Dictionary<int, RpgStat> rpgStatsMap = new();
+        private readonly Dictionary<int, RpgStat> _statsDictionary = new();
 
         private void OnEnable()
         {
@@ -35,33 +33,30 @@ namespace AV.RpgStats.Runtime
 
         public bool HasChanged
         {
-            get => hasUnsavedChanges;
-            set => hasUnsavedChanges = value;
+            get => isDirty;
+            set => isDirty = value;
         }
 
-        public void Apply(int id, RpgStatModifier modifier)
+        bool IRpgStatsMap.TryApply(int id, RpgStatModifier modifier)
         {
-            if (rpgStatsMap.TryGetValue(id, out var stat))
-            {
-                var changed = stat.ApplyModifier(modifier);
-                if (!changed) return;
-                rpgStatsMap[id] = stat;
-                hasUnsavedChanges = true;
-            }
-            else
+            if (!_statsDictionary.TryGetValue(id, out var stat))
             {
                 Debug.LogWarning($"[RpgStatsDictionary] Stat ID {id} not found.", this);
+                return false;
             }
+
+            var changed = stat.ApplyModifier(modifier);
+            if (!changed) return false;
+            _statsDictionary[id] = stat;
+            isDirty = true;
+            return true;
         }
 
-        public bool TryGet(int id, out RpgStat stat)
-        {
-            return rpgStatsMap.TryGetValue(id, out stat);
-        }
+        public bool TryGet(int id, out RpgStat stat) => _statsDictionary.TryGetValue(id, out stat);
 
         public IEnumerator<KeyValuePair<int, RpgStat>> GetEnumerator()
         {
-            return rpgStatsMap.GetEnumerator();
+            return _statsDictionary.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -69,26 +64,21 @@ namespace AV.RpgStats.Runtime
             return GetEnumerator();
         }
 
-        public void Set(int id, RpgStatModifier modifier)
-        {
-            Apply(id, modifier);
-        }
-
         [ContextMenu("Log Pretty")]
         public void Log()
         {
-            if (rpgStatsMap.Count == 0) return;
+            if (_statsDictionary.Count == 0) return;
 
             var entries = new List<(string Name, RpgStat Stat)>();
             var maxNameLength = 0;
 
-            foreach (var kvp in rpgStatsMap)
+            foreach (var kvp in _statsDictionary)
             {
-                var name = GetStatName(kvp.Key);
-                if (string.IsNullOrEmpty(name)) name = $"ID_{kvp.Key}";
+                var statName = GetStatName(kvp.Key);
+                if (string.IsNullOrEmpty(statName)) statName = $"ID_{kvp.Key}";
 
-                if (name.Length > maxNameLength) maxNameLength = name.Length;
-                entries.Add((name, kvp.Value));
+                if (statName.Length > maxNameLength) maxNameLength = statName.Length;
+                entries.Add((statName, kvp.Value));
             }
 
             maxNameLength += 2;
@@ -130,7 +120,7 @@ namespace AV.RpgStats.Runtime
         {
             if (idObj is not int id) return "null";
 
-            foreach (var script in attributeScripts)
+            foreach (var script in rpgStatScripts)
                 if (script != null && script.ID == id)
                     return script.name;
 
@@ -144,35 +134,35 @@ namespace AV.RpgStats.Runtime
 
         private void ReloadAttributeMap()
         {
-            rpgStatsMap.Clear();
+            _statsDictionary.Clear();
 
-            foreach (var script in attributeScripts)
-                if (script != null)
-                    AddStatSafe(script.ID, script.rpgStat);
+            foreach (var s in rpgStatScripts)
+                if (s != null)
+                    AddStatSafe(s.ID, s.rpgStat);
 
             if (rpgStatScriptsGroup != null && rpgStatScriptsGroup.attributeScripts != null)
-                foreach (var script in rpgStatScriptsGroup.attributeScripts)
-                    if (script != null)
-                        AddStatSafe(script.ID, script.rpgStat);
+                foreach (var s in rpgStatScriptsGroup.attributeScripts)
+                    if (s != null)
+                        AddStatSafe(s.ID, s.rpgStat);
 
             RecalculateAll();
-            hasUnsavedChanges = true;
+            isDirty = true;
         }
 
         private void AddStatSafe(int id, RpgStat stat)
         {
-            if (!rpgStatsMap.TryAdd(id, stat))
+            if (!_statsDictionary.TryAdd(id, stat))
                 Debug.LogWarning($"[RpgStatsDictionary] Duplicate Stat ID detected: {id}. Skipping.", this);
         }
 
         private void RecalculateAll()
         {
-            var keys = new List<int>(rpgStatsMap.Keys);
+            var keys = new List<int>(_statsDictionary.Keys);
             foreach (var key in keys)
             {
-                var stat = rpgStatsMap[key];
+                var stat = _statsDictionary[key];
                 stat.Recalculate();
-                rpgStatsMap[key] = stat;
+                _statsDictionary[key] = stat;
             }
         }
     }

@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace AV.RpgStats.Runtime
 {
-    [HelpURL("https://github.com/IAFahim/AV.RpgStats")]
     [CreateAssetMenu(fileName = nameof(RpgStatScriptsGroup), menuName = "AV/RpgStatScript/Group", order = 0)]
     public class RpgStatScriptsGroup : ScriptableObject, IUID
     {

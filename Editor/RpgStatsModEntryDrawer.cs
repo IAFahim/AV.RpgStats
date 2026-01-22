@@ -1,14 +1,14 @@
-using AV.Lifetime.Realtime;
+﻿using AV.Lifetime.Realtime;
 using AV.RpgStats.Runtime;
 using UnityEditor;
 using UnityEngine;
 
 namespace AV.RpgStats.Editor
 {
-    [CustomPropertyDrawer(typeof(RpgStatActivator.RpgStatsModEntry))]
+    [CustomPropertyDrawer(typeof(RpgStatModifierToggle.RpgStatsModEntry))]
     public sealed class RpgStatsModEntryDrawer : PropertyDrawer
     {
-        private InitializeMono _initializeMono;
+        private ITargetContextSystem _contextSystem;
         private SerializedProperty _modifierProp;
         private SerializedProperty _rpgStatScriptProp;
         private SerializedProperty _targetProp;
@@ -48,17 +48,18 @@ namespace AV.RpgStats.Editor
             _modifierProp = property.FindPropertyRelative("Modifier");
             _targetProp = property.FindPropertyRelative("Target");
 
-            // Cache InitializeMono reference
-            if (_initializeMono == null)
+            // Cache ITargetContextSystem reference
+            if (_contextSystem == null)
             {
                 var targetObject = property.serializedObject.targetObject;
-                if (targetObject is MonoBehaviour behaviour) _initializeMono = behaviour.GetComponent<InitializeMono>();
+                if (targetObject is MonoBehaviour behaviour) 
+                    _contextSystem = behaviour.GetComponent<ITargetContextSystem>();
             }
         }
 
         private void PingTarget(int targetIndex)
         {
-            if (_initializeMono == null) return;
+            if (_contextSystem == null) return;
 
             var target = (ETarget)targetIndex;
             if (!TryGetTargetTransform(target, out var targetTransform)) return;
@@ -69,33 +70,14 @@ namespace AV.RpgStats.Editor
         private bool TryGetTargetTransform(ETarget target, out Transform transform)
         {
             transform = null;
-            if (_initializeMono == null) return false;
+            if (_contextSystem == null) return false;
 
-            var context = _initializeMono.targetContext;
+            if (_contextSystem.TryGetContext(out var context) != TargetContextResult.Success)
+                return false;
 
-            switch (target)
-            {
-                case ETarget.Self:
-                    transform = _initializeMono.transform;
-                    return true;
-                case ETarget.Owner:
-                    transform = context.Owner;
-                    break;
-                case ETarget.Source:
-                    transform = context.Source;
-                    break;
-                case ETarget.Target:
-                    transform = context.Target;
-                    break;
-                case ETarget.Custom0:
-                    transform = context.Custom0;
-                    break;
-                case ETarget.Custom1:
-                    transform = context.Custom1;
-                    break;
-            }
+            var self = (_contextSystem as MonoBehaviour).transform;
 
-            return transform != null;
+            return TargetContextLogic.TryGetTransform(self, context, in target, out transform);
         }
     }
 }
