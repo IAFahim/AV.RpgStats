@@ -18,7 +18,6 @@
   "category": "Gameplay",
   "dependencies": {
     "com.av.lifetime": "1.0.0",
-    "com.av.variablerpg": "1.0.0",
     "com.av.cancelfoldout": "2.3.0",
     "com.av.dictionaryvisualizer": "1.0.0",
     "com.unity.entities": "1.0.0",
