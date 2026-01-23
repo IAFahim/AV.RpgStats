@@ -1,36 +1,41 @@
-﻿{
-    "name":  "com.av.rpgstats",
-    "version":  "1.0.0",
-    "displayName":  "AV.RpgStats",
-    "description":  "High-performance DOD RPG stat system for Unity with modifier support and targeting",
-    "unity":  "2022.3",
-    "author":  {
-                   "name":  "IAFahim",
-                   "email":  "iafahim.dev@gmail.com",
-                   "url":  "https://github.com/IAFahim"
-               },
-    "keywords":  [
-                     "rpg",
-                     "stats",
-                     "attributes",
-                     "dod",
-                     "data-oriented",
-                     "modifiers",
-                     "buffs",
-                     "debuffs"
-                 ],
-    "category":  "Gameplay",
-    "dependencies":  {
-                         "com.av.lifetime":  "1.0.0",
-                         "com.av.cancelfoldout":  "2.3.0",
-                         "com.av.dictionaryvisualizer":  "1.0.0",
-                         "com.unity.entities":  "1.0.0"
-                     },
-    "samples":  [
-                    {
-                        "displayName":  "Demo Scene",
-                        "description":  "Example scene showing stat modifiers and targeting",
-                        "path":  "Demos/Scenes/Test Attribute.unity"
-                    }
-                ]
+{
+  "name": "com.av.rpgstats",
+  "version": "1.0.0",
+  "displayName": "AV RpgStats",
+  "description": "High-performance DOD RPG stat system for Unity with modifier support and targeting",
+  "unity": "2022.3",
+  "author": {
+    "name": "IAFahim",
+    "email": "iafahim.dev@gmail.com",
+    "url": "https://github.com/IAFahim"
+  },
+  "keywords": [
+    "rpg",
+    "stats",
+    "attributes",
+    "dod",
+    "data-oriented",
+    "modifiers",
+    "buffs",
+    "debuffs"
+  ],
+  "category": "Gameplay",
+  "license": "MIT",
+  "dependencies": {
+    "com.av.lifetime": "1.0.0",
+    "com.av.cancelfoldout": "2.3.0",
+    "com.av.dictionaryvisualizer": "1.0.0",
+    "com.unity.entities": "1.0.0"
+  },
+  "samples": [
+    {
+      "displayName": "Demo Scene",
+      "description": "Example scene showing stat modifiers and targeting",
+      "path": "Samples~/Scenes/AV.RpgStats.unity"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IAFahim/AV.RpgStats"
+  }
 }
